@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💙</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<title>جدول كارم الأسبوعي | خطة الإنجاز</title>
+<style>
+:root{--bg:#0b1220;--panel:#121d30;--panel2:#18263c;--text:#edf4ff;--muted:#9aabc3;--line:#263750;--accent:#7c9cff;--green:#42d6a4;--gold:#ffc66d;--pink:#ff8eb5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#1b3152 0,transparent 38%),radial-gradient(ellipse at 90% 20%,#30234c 0,transparent 30%),var(--bg);color:var(--text);font-family:'Tajawal',Tahoma,Arial,sans-serif;min-height:100vh}
+.wrap{max-width:1120px;margin:auto;padding:28px 18px 55px}
+.hero{position:relative;overflow:hidden;border:1px solid #314462;border-radius:28px;padding:30px;background:linear-gradient(125deg,rgba(31,54,88,.96),rgba(33,31,65,.94));box-shadow:0 18px 55px #0005}
+.hero:after{content:"✦";position:absolute;left:35px;top:18px;font-size:100px;color:#ffffff0d;transform:rotate(18deg)}
+.kicker{color:#a9c2ff;font-size:13px;font-weight:bold;letter-spacing:.4px}
+h1{font-size:clamp(28px,5vw,43px);margin:12px 0 8px}.hero p{margin:0;color:#c2cde0;line-height:1.8}
+.hero-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.stat{background:#ffffff10;border:1px solid #ffffff18;padding:11px 15px;border-radius:15px;min-width:125px}.stat b{display:block;font-size:20px;margin-bottom:3px}.stat span{font-size:12px;color:#c2cde0}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:28px 2px 14px}.section-head h2{margin:0;font-size:21px}.section-head small{color:var(--muted)}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-bottom:18px}
+.day-btn{position:relative;border:1px solid var(--line);background:#111c2d;color:var(--muted);border-radius:14px;padding:12px 5px;font:inherit;cursor:pointer;transition:.2s}
+.day-btn strong{display:block;color:inherit;font-size:14px}.day-btn span{font-size:11px}
+.day-btn.active{background:linear-gradient(135deg,#6688f4,#866be8);border-color:transparent;color:white;box-shadow:0 8px 24px #667eea44}
+.day-btn .today-dot{position:absolute;top:6px;left:8px;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.now-card{background:linear-gradient(120deg,#16324a,#1a2440);border:1px solid #33517a;border-radius:18px;padding:16px 18px;margin-bottom:14px;display:grid;gap:10px}
+.now-card .nc-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.now-card .nc-label{font-size:11px;font-weight:bold;padding:4px 10px;border-radius:20px;white-space:nowrap}
+.nc-now .nc-label{background:#42d6a422;color:var(--green);border:1px solid #42d6a455}
+.nc-next .nc-label{background:#7c9cff22;color:#b9ccff;border:1px solid #7c9cff44}
+.now-card .nc-title{font-size:15px;font-weight:bold;line-height:1.6}
+.now-card .nc-meta{font-size:12px;color:var(--muted)}
+.nc-free{color:#bfe9d2;font-size:13px;font-weight:bold}
+.day-summary{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin-bottom:14px}
+.day-summary h3{margin:0 0 5px;font-size:20px}.day-summary p{margin:0;color:var(--muted);font-size:13px}
+.progress{width:min(240px,42%)}.progress-label{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-bottom:7px}.bar{height:8px;background:#29384f;border-radius:20px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),#8de6bb);border-radius:20px;transition:width .25s}.bar i.full{background:linear-gradient(90deg,#ffe08a,#ffb84d);box-shadow:0 0 10px #ffc66d66}
+.day-done{margin-top:8px;font-size:12px;font-weight:bold;color:var(--gold)}
+.timeline{display:grid;gap:10px}
+.item{display:grid;grid-template-columns:150px 1fr 36px;gap:14px;align-items:center;background:linear-gradient(110deg,var(--panel),#111b2c);border:1px solid var(--line);border-radius:17px;padding:14px 16px;transition:.2s}
+.item:hover{border-color:#536d99;transform:translateY(-1px)}.item.done{opacity:.58}.item.done .task-title{text-decoration:line-through}
+.item.past:not(.now){opacity:.68}
+.item.now{border-color:var(--green);box-shadow:0 0 0 1px var(--green),0 8px 26px #42d6a422;background:linear-gradient(110deg,#153027,#111b2c)}
+.now-badge{display:inline-block;margin-inline-start:8px;font-size:10px;font-weight:bold;color:#07281b;background:var(--green);padding:3px 8px;border-radius:20px;vertical-align:middle}
+.time{font-size:13px;color:#b7c8e5;font-weight:bold;line-height:1.6}
+.task-title{font-size:15px;font-weight:bold;line-height:1.6}.tag{display:inline-block;margin-top:5px;font-size:11px;padding:4px 9px;border-radius:20px;background:#263653;color:#bcd0ff}
+.item.study .tag{background:#263c59;color:#9dc9ff}.item.lesson .tag{background:#3d3155;color:#d8b5ff}.item.rest .tag{background:#24433f;color:#8fe3c7}
+.check{width:23px;height:23px;accent-color:var(--green);cursor:pointer}
+.rest-note{color:#9eb2ca;font-size:12px;margin:16px 4px 0;line-height:1.8}
+.actions{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:22px}
+.actions .grp{display:flex;gap:10px;flex-wrap:wrap}
+button.action{border:1px solid var(--line);background:#17243a;color:var(--text);padding:10px 14px;border-radius:12px;font:inherit;font-size:13px;cursor:pointer}
+button.action:hover{background:#223653}.quote{margin-top:26px;text-align:center;color:#9aabc3;font-size:13px;line-height:1.9}
+.toast{position:fixed;bottom:18px;right:50%;transform:translateX(50%) translateY(20px);background:#1d2f4a;border:1px solid #3b5378;color:var(--text);padding:11px 18px;border-radius:14px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 10px 30px #0007;z-index:50}
+.toast.show{opacity:1;transform:translateX(50%) translateY(0)}
+@media(max-width:700px){.wrap{padding:16px 12px 35px}.hero{padding:23px 20px}.days{grid-template-columns:repeat(4,1fr)}.item{grid-template-columns:1fr 32px;gap:5px;padding:13px}.time{grid-column:1/-1;color:#9fb7dc}.check{grid-column:2;grid-row:2}.task{grid-column:1;grid-row:2}.day-summary{align-items:flex-start;flex-direction:column}.progress{width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <div class="kicker">✦ خطتك الأسبوعية — خطوة بخطوة</div>
+  <h1>جدول كارم 💙</h1>
+  <p>كل يوم فرصة جديدة للإنجاز. الموقع بيفتح على يوم النهارده لوحده، ويوريك إنت في أنهي مهمة دلوقتي والجاية إيه.<br>علامات الإنجاز بتتحفظ تلقائيًا على نفس الجهاز، وكل أسبوع ليه سجله لوحده.</p>
+  <div class="hero-row">
+    <div class="stat"><b>7 أيام</b><span>خطة أسبوع كامل</span></div>
+    <div class="stat"><b>4:00 فجرًا</b><span>بداية يومك</span></div>
+    <div class="stat"><b id="weekPct">0%</b><span>إنجاز الأسبوع</span></div>
+  </div>
+</header>
+
+<div class="section-head"><h2>📅 اختار يومك</h2><small>النقطة الخضرا = يوم النهارده</small></div>
+<nav class="days" id="days"></nav>
+<section class="now-card" id="nowCard" hidden>
+  <div class="nc-row nc-now"><span class="nc-label">⏰ دلوقتي</span><span class="nc-title" id="nowTitle"></span><span class="nc-meta" id="nowMeta"></span></div>
+  <div class="nc-row nc-next"><span class="nc-label">⏭ الجاي</span><span class="nc-title" id="nextTitle"></span><span class="nc-meta" id="nextMeta"></span></div>
+</section>
+<section class="day-summary">
+  <div><h3 id="dayTitle">السبت</h3><p id="daySubtitle">بداية أسبوع مليانة إنجاز</p></div>
+  <div class="progress"><div class="progress-label"><span>إنجاز اليوم</span><b id="progressText">0%</b></div><div class="bar"><i id="progressBar"></i></div><div class="day-done" id="dayDone" hidden>🎉 خلّصت يومك كامل، يا هندسة!</div></div>
+</section>
+<main class="timeline" id="timeline"></main>
+<p class="rest-note">🌿 أي فترة فاضية أو غير محددة في الجدول محسوبة راحة ووقت حر، من غير ما نضيف فيها مذاكرة من عندنا.</p>
+<div class="actions">
+  <div class="grp">
+    <button class="action" id="resetDay">↻ تصفير إنجازات اليوم</button>
+    <button class="action" id="resetAll">مسح كل العلامات</button>
+  </div>
+  <div class="grp">
+    <button class="action" id="exportBtn">⬇ نسخة احتياطية</button>
+    <button class="action" id="importBtn">⬆ استرجاع نسخة</button>
+    <input type="file" id="importFile" accept="application/json,.json" hidden>
+  </div>
+</div>
+<div class="quote">«مش مطلوب منك تكون مثالي كل يوم… المطلوب إنك ترجع تكمل.» ✨</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+// item: [id, العرض النصي للوقت, المهمة, التصنيف, النوع, بداية بالدقائق, نهاية بالدقائق أو null]
+const schedule = [
+{name:"السبت",sub:"يوم الفيزياء والمواد الشرعية والدروس",items:[
+["m01","4:00 – 4:30 فجرًا","استيقاظ وإفاقة وصلاة الفجر","راحة","rest",240,270],
+["m02","4:30 – 9:30 صباحًا","مذاكرة الفيزياء كاملة + الحل","مذاكرة","study",270,570],
+["m03","9:30 – 10:30 صباحًا","راحة وإفطار","راحة","rest",570,630],
+["m04","10:30 صباحًا – 2:00 ظهرًا","مذاكرة المواد الشرعية كاملة","مذاكرة","study",630,840],
+["m05","2:00 – 3:00 عصرًا","الاستعداد وارتداء الملابس لدرس الأحياء","استعداد","rest",840,900],
+["m06","3:00 – 4:00 عصرًا","درس الأحياء","درس","lesson",900,960],
+["m07","4:00 – 5:00 عصرًا","درس الرياضيات","درس","lesson",960,1020],
+["m08","5:00 – 9:00 مساءً","لعب وراحة ووقت حر","راحة","rest",1020,1260],
+]},
+{name:"الأحد",sub:"الكيمياء والأحياء والرياضيات",items:[
+["m09","4:00 – 4:30 فجرًا","استيقاظ وإفاقة وصلاة الفجر","راحة","rest",240,270],
+["m10","4:30 – 7:00 صباحًا","مذاكرة الكيمياء","مذاكرة","study",270,420],
+["m11","7:00 – 7:30 صباحًا","الاستعداد لدرس الرياضيات","استعداد","rest",420,450],
+["m12","7:30 – 8:30 صباحًا","درس الرياضيات","درس","lesson",450,510],
+["m13","8:30 – 10:00 صباحًا","درس الأحياء","درس","lesson",510,600],
+["m14","10:00 – 10:30 صباحًا","راحة ووقت حر","راحة","rest",600,630],
+["m15","10:30 صباحًا – 2:00 ظهرًا","استكمال مذاكرة الكيمياء + الحل","مذاكرة","study",630,840],
+["m16","2:00 – 3:00 عصرًا","راحة وإفطار","راحة","rest",840,900],
+["m17","3:00 – 6:00 مساءً","مذاكرة الأحياء كاملة + الحل","مذاكرة","study",900,1080],
+["m18","6:00 مساءً فصاعدًا","راحة ووقت حر","راحة","rest",1080,null],
+]},
+{name:"الاثنين",sub:"العربي والأحياء والرياضيات",items:[
+["m19","4:00 – 4:30 فجرًا","استيقاظ وإفاقة وصلاة الفجر","راحة","rest",240,270],
+["m20","4:30 – 6:30 صباحًا","مذاكرة العربي + الحل","مذاكرة","study",270,390],
+["m21","6:30 – 7:00 صباحًا","راحة ووقت حر","راحة","rest",390,420],
+["m22","7:00 – 8:00 صباحًا","درس العربي في السنتر","درس","lesson",420,480],
+["m23","8:00 – 8:30 صباحًا","راحة ووقت حر","راحة","rest",480,510],
+["m24","8:30 – 9:30 صباحًا","استكمال مذاكرة العربي","مذاكرة","study",510,570],
+["m25","9:30 – 10:00 صباحًا","راحة ووقت حر","راحة","rest",570,600],
+["m26","10:00 صباحًا – 12:00 ظهرًا","درس الأحياء في السنتر","درس","lesson",600,720],
+["m27","12:00 – 1:00 ظهرًا","راحة ووقت حر","راحة","rest",720,780],
+["m28","1:00 – 4:00 عصرًا","مذاكرة الرياضيات كاملة + الحل","مذاكرة","study",780,960],
+["m29","5:00 مساءً فصاعدًا","راحة ووقت حر","راحة","rest",1020,null],
+]},
+{name:"الثلاثاء",sub:"الفيزياء والمواد الشرعية",items:[
+["m30","4:00 – 4:30 فجرًا","استيقاظ وإفاقة وصلاة الفجر","راحة","rest",240,270],
+["m31","4:30 – 8:30 صباحًا","مذاكرة الفيزياء","مذاكرة","study",270,510],
+["m32","8:30 – 9:00 صباحًا","راحة ووقت حر","راحة","rest",510,540],
+["m33","9:00 صباحًا – 12:00 ظهرًا","درس الأحياء","درس","lesson",540,720],
+["m34","12:00 – 1:00 ظهرًا","استكمال مذاكرة الفيزياء + الحل","مذاكرة","study",720,780],
+["m35","1:00 – 2:00 ظهرًا","راحة","راحة","rest",780,840],
+["m36","2:00 – 5:00 مساءً","مذاكرة المواد الشرعية كاملة + الحل","مذاكرة","study",840,1020],
+["m37","5:00 مساءً فصاعدًا","راحة ووقت حر","راحة","rest",1020,null],
+]},
+{name:"الأربعاء",sub:"الكيمياء والأحياء والرياضيات",items:[
+["m38","4:00 – 4:30 فجرًا","استيقاظ وإفاقة وصلاة الفجر","راحة","rest",240,270],
+["m39","4:30 – 7:00 صباحًا","مذاكرة الكيمياء","مذاكرة","study",270,420],
+["m40","7:00 – 7:30 صباحًا","راحة ووقت حر","راحة","rest",420,450],
+["m41","7:30 – 9:00 صباحًا","درس الرياضيات","درس","lesson",450,540],
+["m42","9:00 – 10:00 صباحًا","راحة ووقت حر","راحة","rest",540,600],
+["m43","10:00 صباحًا – 2:00 ظهرًا","استكمال مذاكرة الكيمياء","مذاكرة","study",600,840],
+["m44","2:00 – 3:00 عصرًا","راحة","راحة","rest",840,900],
+["m45","3:00 – 5:30 مساءً","مذاكرة الأحياء كاملة + الحل","مذاكرة","study",900,1050],
+["m46","5:30 – 6:00 مساءً","راحة ووقت حر","راحة","rest",1050,1080],
+["m47","6:00 – 8:00 مساءً","درس الأحياء","درس","lesson",1080,1200],
+["m48","8:00 مساءً فصاعدًا","راحة ووقت حر","راحة","rest",1200,null],
+]},
+{name:"الخميس",sub:"العربي والرياضيات والأحياء",items:[
+["m49","4:00 – 4:30 فجرًا","استيقاظ وإفاقة وصلاة الفجر","راحة","rest",240,270],
+["m50","4:30 – 6:00 صباحًا","مذاكرة العربي","مذاكرة","study",270,360],
+["m51","6:00 – 7:00 صباحًا","راحة ووقت حر","راحة","rest",360,420],
+["m52","7:00 – 8:00 صباحًا","درس العربي في السنتر","درس","lesson",420,480],
+["m53","8:00 – 9:00 صباحًا","درس الرياضيات في السنتر","درس","lesson",480,540],
+["m54","9:00 – 10:00 صباحًا","راحة ووقت حر","راحة","rest",540,600],
+["m55","10:00 صباحًا – 12:00 ظهرًا","استكمال مذاكرة العربي","مذاكرة","study",600,720],
+["m56","12:00 – 1:00 ظهرًا","راحة","راحة","rest",720,780],
+["m57","1:00 – 2:00 ظهرًا","مذاكرة الرياضيات + الحل","مذاكرة","study",780,840],
+["m58","2:00 – 3:00 عصرًا","راحة ووقت حر","راحة","rest",840,900],
+["m59","3:00 – 5:00 عصرًا","درس الأحياء","درس","lesson",900,1020],
+["m60","5:00 – 6:00 مساءً","راحة ووقت حر","راحة","rest",1020,1080],
+["m61","6:00 – 7:00 مساءً","استكمال مذاكرة الرياضيات + الحل","مذاكرة","study",1080,1140],
+["m62","8:00 مساءً فصاعدًا","راحة ووقت حر","راحة","rest",1200,null],
+]},
+{name:"الجمعة",sub:"الفيزياء والمواد الشرعية والدروس",items:[
+["m63","4:00 – 4:30 فجرًا","استيقاظ وإفاقة وصلاة الفجر","راحة","rest",240,270],
+["m64","4:30 – 10:00 صباحًا","مذاكرة الفيزياء كاملة + الحل","مذاكرة","study",270,600],
+["m65","10:00 صباحًا – 12:00 ظهرًا","راحة ووقت حر","راحة","rest",600,720],
+["m66","12:00 – 1:00 ظهرًا","درس الأحياء","درس","lesson",720,780],
+["m67","1:00 – 2:00 ظهرًا","راحة ووقت حر","راحة","rest",780,840],
+["m68","2:00 – 3:00 عصرًا","مذاكرة المواد الشرعية كاملة + الحل","مذاكرة","study",840,900],
+["m69","3:00 – 4:00 عصرًا","راحة ووقت حر","راحة","rest",900,960],
+["m70","4:00 – 5:00 عصرًا","درس الرياضيات","درس","lesson",960,1020],
+["m71","5:00 – 6:00 مساءً","راحة ووقت حر","راحة","rest",1020,1080],
+["m72","6:00 – 7:00 مساءً","استكمال مذاكرة المواد الشرعية + الحل","مذاكرة","study",1080,1140],
+["m73","8:00 مساءً فصاعدًا","راحة ووقت حر","راحة","rest",1200,null],
+]},
+];
+const STORE = "karem-schedule-v2";
+const BASE_TITLE = document.title;
+const daysEl = document.getElementById('days'), timeline = document.getElementById('timeline');
+const nowCard = document.getElementById('nowCard');
+
+function nowParts(){
+  const now = new Date(); // اليوم بيتبدل 12 بالليل زي التقويم العادي
+  return { now, dayIdx: (now.getDay()+1)%7, t: now.getHours()*60 + now.getMinutes() };
+}
+function weekKey(date){
+  const d = new Date(date.getTime());
+  d.setDate(d.getDate() - ((d.getDay()+1)%7)); // السبت بداية الأسبوع
+  const p = x => String(x).padStart(2,'0');
+  return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate());
+}
+function loadStore(){ try{ const s = JSON.parse(localStorage.getItem(STORE)); if(s && s.weeks) return s; }catch(e){} return {weeks:{}}; }
+function saveStore(st){ localStorage.setItem(STORE, JSON.stringify(st)); }
+function curWeek(){ const st = loadStore(); const k = weekKey(nowParts().now); if(!st.weeks[k]) st.weeks[k] = {}; return {st, k, wk: st.weeks[k]}; }
+
+// ترحيل علامات النسخة القديمة (karem-week-d-i) مرة واحدة للأسبوع الحالي
+// مفاتيح النسخة القديمة بتفضل زي ما هي عشان الملف الأصلي يفضل شغال بعلاماته
+function migrate(){
+  if(localStorage.getItem(STORE + '-migrated')) return;
+  const {st, k, wk} = curWeek();
+  let moved = 0;
+  schedule.forEach((d, di) => d.items.forEach((it, i) => {
+    if(localStorage.getItem('karem-week-' + di + '-' + i) === '1' && !wk[it[0]]){ wk[it[0]] = new Date().toISOString(); moved++; }
+  }));
+  if(moved) saveStore(st);
+  localStorage.setItem(STORE + '-migrated', '1');
+}
+
+let active = nowParts().dayIdx; // يفتح على يوم النهارده
+const isDone = (wk, id) => !!wk[id];
+
+function fmtDur(mins){
+  if(mins <= 0) return 'دلوقتي';
+  const h = Math.floor(mins/60), m = mins%60, parts = [];
+  if(h === 1) parts.push('ساعة'); else if(h === 2) parts.push('ساعتين'); else if(h >= 3 && h <= 10) parts.push(h + ' ساعات'); else if(h > 10) parts.push(h + ' ساعة');
+  if(m === 1) parts.push('دقيقة'); else if(m === 2) parts.push('دقيقتين'); else if(m >= 3 && m <= 10) parts.push(m + ' دقائق'); else if(m > 10) parts.push(m + ' دقيقة');
+  return parts.join(' و');
+}
+function shortDur(mins){
+  const h = Math.floor(mins/60), m = mins%60, parts = [];
+  if(h) parts.push(h + ' س');
+  if(m || !h) parts.push(m + ' د');
+  return parts.join(' ');
+}
+function updateTitle(t){
+  const day = schedule[nowParts().dayIdx];
+  let cur = null;
+  for(const it of day.items){
+    const s = it[5], e = it[6] === null ? 1440 : it[6];
+    if(t >= s && t < e) cur = it;
+  }
+  document.title = (cur && cur[6] !== null) ? ('⏰ فاضل ' + shortDur(cur[6] - t) + ' · ' + cur[2]) : BASE_TITLE;
+}
+function render(){
+ const {dayIdx, t} = nowParts();
+ const {wk} = curWeek();
+ daysEl.innerHTML = schedule.map((d,i)=>`<button class="day-btn ${i===active?'active':''}" data-day="${i}">${i===dayIdx?'<span class="today-dot" title="اليوم"></span>':''}<strong>${d.name}</strong><span>${d.items.length} فترات</span></button>`).join('');
+ daysEl.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{active=+b.dataset.day;render()}));
+ const day = schedule[active];
+ document.getElementById('dayTitle').textContent = day.name;
+ document.getElementById('daySubtitle').textContent = day.sub;
+ const isToday = active === dayIdx;
+ nowCard.hidden = !isToday;
+ timeline.innerHTML = day.items.map((it,i)=>{
+   const done = isDone(wk, it[0]);
+   const s = it[5], e = it[6] === null ? 1440 : it[6];
+   const now = isToday && t >= s && t < e;
+   const past = isToday && t >= e;
+   return `<article class="item ${it[4]} ${done?'done':''} ${now?'now':''} ${past?'past':''}" data-id="${it[0]}" data-s="${s}" data-e="${e}"><div class="time">${it[1]}</div><div class="task"><div class="task-title">${it[2]}${now?'<span class="now-badge">دلوقتي</span>':''}</div><span class="tag">${it[3]}</span></div><input class="check" type="checkbox" aria-label="تم إنجاز المهمة" data-id="${it[0]}" ${done?'checked':''}></article>`;
+ }).join('');
+ timeline.querySelectorAll('.check').forEach(c=>c.addEventListener('change',()=>{
+   const {st, k, wk} = curWeek();
+   if(c.checked) wk[c.dataset.id] = new Date().toISOString(); else delete wk[c.dataset.id];
+   saveStore(st);
+   renderProgress();
+ }));
+ renderProgress();
+ if(isToday) renderNow(t); else document.title = BASE_TITLE;
+}
+function renderProgress(){
+ const {wk} = curWeek();
+ const day = schedule[active];
+ const count = day.items.filter(it => isDone(wk, it[0])).length;
+ const pct = Math.round(count/day.items.length*100);
+ document.getElementById('progressText').textContent = pct + '%';
+ const bar = document.getElementById('progressBar');
+ bar.style.width = pct + '%';
+ bar.classList.toggle('full', pct === 100);
+ document.getElementById('dayDone').hidden = pct !== 100;
+ timeline.querySelectorAll('.item').forEach(el => el.classList.toggle('done', isDone(wk, el.dataset.id)));
+ let doneAll = 0, totalAll = 0;
+ schedule.forEach(d => d.items.forEach(it => { totalAll++; if(isDone(wk, it[0])) doneAll++; }));
+ document.getElementById('weekPct').textContent = Math.round(doneAll/totalAll*100) + '%';
+}
+function renderNow(t){
+ const day = schedule[nowParts().dayIdx];
+ let cur = null, next = null, nextIn = 0;
+ for(const it of day.items){
+   const s = it[5], e = it[6] === null ? 1440 : it[6];
+   if(t >= s && t < e) cur = it;
+   if(!next && s > t){ next = it; nextIn = s - t; }
+ }
+ if(cur){
+   document.getElementById('nowTitle').textContent = cur[2];
+   document.getElementById('nowMeta').textContent = cur[6] === null ? 'مفتوحة لحد آخر اليوم' : 'فاضل عليها ' + fmtDur((cur[6] === null ? 1440 : cur[6]) - t);
+ }else{
+   document.getElementById('nowTitle').innerHTML = '<span class="nc-free">🌿 فترة فاضية دلوقتي</span>';
+   document.getElementById('nowMeta').textContent = '';
+ }
+ if(next){
+   document.getElementById('nextTitle').textContent = next[2];
+   document.getElementById('nextMeta').textContent = 'تبدأ بعد ' + fmtDur(nextIn);
+ }else{
+   const tmr = schedule[(nowParts().dayIdx + 1) % 7];
+   document.getElementById('nextTitle').textContent = tmr.items[0][2] + ' (' + tmr.name + ')';
+   document.getElementById('nextMeta').textContent = 'تبدأ بعد ' + fmtDur(1440 - t + tmr.items[0][5]);
+ }
+ updateTitle(t);
+}
+function tick(){
+ const {dayIdx, t} = nowParts();
+ if(active === dayIdx){
+   timeline.querySelectorAll('.item').forEach(el => {
+     const s = +el.dataset.s, e = +el.dataset.e;
+     el.classList.toggle('now', t >= s && t < e);
+     el.classList.toggle('past', t >= e);
+     const tt = el.querySelector('.task-title');
+     const badge = tt.querySelector('.now-badge');
+     if(t >= s && t < e && !badge) tt.insertAdjacentHTML('beforeend','<span class="now-badge">دلوقتي</span>');
+     if(!(t >= s && t < e) && badge) badge.remove();
+   });
+   renderNow(t);
+ }
+ if(dayIdx !== lastDayIdx){ lastDayIdx = dayIdx; render(); } // عدّى 12 بالليل — حدّث "النهارده"
+}
+let lastDayIdx = nowParts().dayIdx;
+setInterval(tick, 30000);
+
+function toast(msg){
+ const el = document.getElementById('toast');
+ el.textContent = msg; el.classList.add('show');
+ clearTimeout(el._t); el._t = setTimeout(()=>el.classList.remove('show'), 3200);
+}
+document.getElementById('resetDay').onclick = () => {
+ if(confirm('تمسح علامات إنجاز يوم ' + schedule[active].name + ' للأسبوع ده؟')){
+   const {st, k, wk} = curWeek();
+   schedule[active].items.forEach(it => delete wk[it[0]]);
+   saveStore(st); render();
+ }
+};
+document.getElementById('resetAll').onclick = () => {
+ if(confirm('متأكد إنك عايز تمسح كل علامات إنجاز الأسبوع ده؟')){
+   const {st, k} = curWeek(); st.weeks[k] = {}; saveStore(st); render();
+ }
+};
+document.getElementById('exportBtn').onclick = () => {
+ const st = loadStore();
+ const payload = {app:'karem-week-schedule', version:2, exportedAt:new Date().toISOString(), weeks:st.weeks};
+ const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+ const a = document.createElement('a');
+ a.href = URL.createObjectURL(blob);
+ a.download = 'karem-schedule-backup-' + weekKey(nowParts().now) + '.json';
+ a.click(); URL.revokeObjectURL(a.href);
+ toast('اتنزلت النسخة الاحتياطية ✅');
+};
+document.getElementById('importBtn').onclick = () => document.getElementById('importFile').click();
+document.getElementById('importFile').addEventListener('change', ev => {
+ const f = ev.target.files[0]; if(!f) return;
+ const r = new FileReader();
+ r.onload = () => {
+   try{
+     const data = JSON.parse(r.result);
+     if(!data || typeof data.weeks !== 'object' || Array.isArray(data.weeks)) throw 0;
+     const st = loadStore();
+     for(const [wkKey, rec] of Object.entries(data.weeks)){
+       if(!rec || typeof rec !== 'object') continue;
+       st.weeks[wkKey] = Object.assign({}, st.weeks[wkKey], rec);
+     }
+     saveStore(st); render();
+     toast('اترجعت النسخة الاحتياطية ✅');
+   }catch(e){ toast('الملف ده مش نسخة احتياطية صالحة ❌'); }
+   ev.target.value = '';
+ };
+ r.readAsText(f);
+});
+migrate();
+render();
+</script>
+</body>
+</html>
